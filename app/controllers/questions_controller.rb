@@ -1,4 +1,7 @@
 class QuestionsController < ApplicationController
+  def rules
+  end
+
   def ask
   end
 
@@ -30,9 +33,9 @@ class QuestionsController < ApplicationController
       end
     end
     if parenthesis.size == 0 || sparenthesis.size == 0
-      return @answer = 'balanceado'
+      return @answer = 'Balanceado'
     else
-      return @answer = 'desbalanceado'
+      return @answer = 'Desbalanceado'
     end
   end
 end

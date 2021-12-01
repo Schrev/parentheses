@@ -14,11 +14,7 @@
     </ol>
     </div>
     <div class="container2">
-      <h4>Tu string:</h4>
-    <h2><%= params[:answer] %></h2>
-    <h4>Respuesta:</h4>
-    <h2><%= @answer %></h2>
-    <%= link_to "Intenta otra vez", rules_path %>
+      <%= render partial: 'questions/ask' %>
     </div>
   </div>
 </div>
