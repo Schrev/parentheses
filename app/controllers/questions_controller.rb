@@ -9,45 +9,38 @@ class QuestionsController < ApplicationController
     balanceado(params[:answer])
   end
 
+  # replaces faces on string, one each time it runs
   def replace(caritas)
-    sparenthesis = []
     caritas.sub!(/:[\(\)]/, 'x')
-    caritas.split('').each do |c|
-      if c == '('
-        sparenthesis << c
-      elsif c == ')' && sparenthesis.last == '('
-        sparenthesis.pop
-      elsif c == ')'
-        sparenthesis << c
-      end
-    end
-    if sparenthesis.size == 0
-    else replace(caritas)
-    end
-end
+  end
 
-def balanceado(string)
+  # stacks parenthesis, returns balanced or not. call replace when needed.
+  def balanceado(string)
     scan = string.split('')
-    parenthesis = []
-    sparenthesis = []
+    stack = []
 
     scan.each do |c|
       if c == '('
-        parenthesis << c
-      elsif c == ')' && parenthesis.last == '('
-        parenthesis.pop
+        stack << c
+      elsif c == ')' && stack.last == '('
+        stack.pop
       elsif c == ')'
-        parenthesis << c
+        stack << c
       end
     end
 
-    if parenthesis.size == 0
-      sparenthesis = []
-    else
-      replace(string)
+    balancer = stack.size
+
+    case balancer
+      when 0
+        @answer = 'Balanceado'
+      else
+        if string.match?(/:[\(\)]/)
+          replace(string)
+          balanceado(string)
+        else
+          @answer = 'Desbalanceado'
+        end
     end
-
-    sparenthesis.size == 0 ? @answer = 'Balanceado' : @answer = 'Desbalanceado'
-
-end
+  end
 end
