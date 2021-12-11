@@ -9,20 +9,9 @@ class QuestionsController < ApplicationController
     balanceado(params[:answer])
   end
 
-  def balanceado(string)
-    scan = string.split('')
-    caritas = string.gsub(/:\(/, '').gsub(/:\)/, '')
-    parenthesis = []
+  def replace(caritas)
     sparenthesis = []
-    scan.each do |c|
-      if c == '('
-        parenthesis << c
-      elsif c == ')' && parenthesis.last == '('
-        parenthesis.pop
-      elsif c == ')'
-        parenthesis << c
-      end
-    end
+    caritas.sub!(/:[\(\)]/, 'x')
     caritas.split('').each do |c|
       if c == '('
         sparenthesis << c
@@ -32,10 +21,33 @@ class QuestionsController < ApplicationController
         sparenthesis << c
       end
     end
-    if parenthesis.size == 0 || sparenthesis.size == 0
-      return @answer = 'Balanceado'
-    else
-      return @answer = 'Desbalanceado'
+    if sparenthesis.size == 0
+    else replace(caritas)
     end
-  end
+end
+
+def balanceado(string)
+    scan = string.split('')
+    parenthesis = []
+    sparenthesis = []
+
+    scan.each do |c|
+      if c == '('
+        parenthesis << c
+      elsif c == ')' && parenthesis.last == '('
+        parenthesis.pop
+      elsif c == ')'
+        parenthesis << c
+      end
+    end
+
+    if parenthesis.size == 0
+      sparenthesis = []
+    else
+      replace(string)
+    end
+
+    sparenthesis.size == 0 ? @answer = 'Balanceado' : @answer = 'Desbalanceado'
+
+end
 end
